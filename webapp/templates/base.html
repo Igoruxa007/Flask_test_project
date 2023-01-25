@@ -10,33 +10,9 @@
   <body>
     <div class="conteiner">
     <h1>{{ page_title }}</h1>
-    <div class="row">
-      {% with messages = get_flashed_messages() %}
-        {% if messages %}
-        <div class="alert alert-warning" role="alert">
-            {% for message in messages %}
-                {{ message }}<br>
-            {% endfor %}
-        </div>
-        {% endif %}
-      {% endwith %}
-      <div class="col-8">
-        <h2>Новости</h2>
-        {% for news in news_list %}
-          <h3><a href="{{ news.url }}">{{ news.title }}</a></h3>
-          <p>{{ news.published.strftime('%d.%m.%Y') }}</p>
-          <hr />
-        {% endfor %}
-      </div>
-      <div class="col-4">
-        <h2>Прогноз погоды</h2>
-        {% if weather_text %}
-          {{ weather_text.temp_C }}, ощущается как {{ weather_text.FeelsLikeC }}
-        {% else %}
-          Прогноз погоды не доступен
-        {% endif %}
-      </div>
-    </div>
+    
+
+    
     </div>    
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
