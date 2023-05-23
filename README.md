@@ -2,10 +2,10 @@
 
 В файле config.py прописать:
 SQLALCHEMY_DATABASE_URI
-WEATHER_API_KEY для worldweatheronline
+WEATHER_API_KEY для weatherapi.com
 WEATHER_DEFAULT_CITY
-SECRET_KEY 
-
+SECRET_KEY
+ 
 Для обновления новостей зпустить get_all_news.py
 Для добавления админа create_admin.py
 
