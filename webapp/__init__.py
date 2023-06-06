@@ -9,7 +9,7 @@ from webapp.news.views import blueprint as news_blueprint
 
 def create_app():
     app = Flask(__name__)
-    app.config.from_pyfile('../config.py')
+    app.config.from_pyfile('config.py')
     db.init_app(app)
 
     with app.app_context():

@@ -10,4 +10,6 @@ SECRET_KEY
 Для добавления админа create_admin.py
 
 Для запуска сервера на windows:
-set FLASK_APP=webapp && set FLASK_ENV=development && set FLASK_DEBUG=1 && flask run
+set FLASK_APP=webapp && set FLASK_DEBUG=1 && set FLASK_DEBUG=1 && flask run
+Linux:
+export FLASK_APP=webapp && export FLASK_DEBUG=1 && flask run

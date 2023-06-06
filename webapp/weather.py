@@ -17,7 +17,7 @@ def weather_by_city():
         if 'current' in weather:
             if 'temp_c' in weather['current']:
                 try:
-                    return weather['current']['temp_c']
+                    return weather['current']
                 except(IndexError, TypeError):
                     return False
         return False
