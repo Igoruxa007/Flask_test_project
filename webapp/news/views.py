@@ -9,7 +9,7 @@ blueprint = Blueprint('news', __name__)
 @blueprint.route("/")
 def index():
     page_title = "Прогноз погоды"
-    weather = weather_by_city(current_app.config["WEATHER_DEFAULT_CITY"])
+    weather = weather_by_city()
     news = News.query.order_by(News.published.desc()).all()
     return render_template('news/index.html', 
         page_title=page_title, 
