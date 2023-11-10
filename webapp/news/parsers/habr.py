@@ -13,18 +13,12 @@ def get_news_snippets():
             title = news.find('a', class_='tm-title__link').text
             url = news.find('a', class_='tm-title__link')['href']
             published = news.find('time')['datetime']
-            # published = parse_habr_date(published)
-            print(title, url, published)
-            # save_news(title, url, published)
+            published = parse_habr_date(published)
+            # print(published)
+            save_news(title, url, published)
 
 def parse_habr_date(date_str):
-    if 'сегодня' in date_str:
-        today = datetime.now()
-        date_str = date_str.replace('сегодня', today.strftime('%d %B %Y'))
-    elif 'вчера' in date_str:
-        yesterday = datetime.now() - timedelta(days=1)
-        date_str = date_str.replace('вчера', yesterday.strftime('%d %B %Y'))
     try:
-        return datetime.strptime(date_str, '%d %B %Y в %H:%M')
+        return datetime.strptime(date_str[:10], '%Y-%m-%d')
     except ValueError:
         return datetime.now()
