@@ -1,5 +1,4 @@
-from flask import Blueprint, current_app
-from flask import render_template
+from flask import abort, Blueprint, current_app, render_template
 
 from webapp.weather import weather_by_city
 from webapp.news.models import News
@@ -17,3 +16,10 @@ def index():
         weather_text=weather,
         news_list=news
         )
+
+@blueprint.route('/news/<int:news_id>')
+def single_news(news_id):
+    my_news = News.query.filter(News.id == news_id).first()
+    if not my_news:
+        abort(404)
+    return render_template('news/single_news.html', page_title=my_news.title, news=my_news)
