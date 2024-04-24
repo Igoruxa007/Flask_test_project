@@ -8,6 +8,7 @@ from webapp.user.views import blueprint as user_blueprint
 from webapp.admin.views import blueprint as admin_blueprint
 from webapp.news.views import blueprint as news_blueprint
 
+
 def create_app():
     app = Flask(__name__)
     app.config.from_pyfile('config.py')
@@ -16,7 +17,7 @@ def create_app():
 
     with app.app_context():
         db.create_all()
-    
+   
     login_manager = LoginManager()
     login_manager.init_app(app)
     login_manager.login_view = 'user.login'
