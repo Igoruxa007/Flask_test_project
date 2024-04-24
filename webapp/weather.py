@@ -18,13 +18,13 @@ def weather_by_city():
             if 'temp_c' in weather['current']:
                 try:
                     return weather['current']
-                except(IndexError, TypeError):
+                except (IndexError, TypeError):
                     return False
         return False
-    except(requests.RequestException, ValueError):
+    except (requests.RequestException, ValueError):
         return False
 
 
 if __name__ == "__main__":
-    weather= weather_by_city()
+    weather = weather_by_city()
     print(weather)
