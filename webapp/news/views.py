@@ -1,4 +1,5 @@
 from flask import abort, Blueprint, render_template
+from flask_login import current_user
 
 from webapp.weather import weather_by_city
 from webapp.news.models import News

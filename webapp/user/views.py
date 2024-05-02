@@ -70,3 +70,14 @@ def process_reg():
                     error
                 ))
         return redirect(url_for('user.register'))
+
+
+@blueprint.route('/<username>')
+def user_page(username):
+    if not current_user.is_authenticated:
+        return redirect(url_for('news.index'))
+    title = 'Ваши данные'
+    user_name = username
+    return render_template('users/user_page.html',
+                           page_title=title,
+                           user_name=user_name)
