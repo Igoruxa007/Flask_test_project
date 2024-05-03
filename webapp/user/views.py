@@ -76,8 +76,11 @@ def process_reg():
 def user_page(username):
     if not current_user.is_authenticated:
         return redirect(url_for('news.index'))
+    user = User.query.filter_by(username=username).first_or_404()
     title = 'Ваши данные'
-    user_name = username
+    user_data = {'username': user.username,
+                 'email': user.email,
+                 'role': user.role}
     return render_template('users/user_page.html',
                            page_title=title,
-                           user_name=user_name)
+                           user_data=user_data)
