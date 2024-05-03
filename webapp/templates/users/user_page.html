@@ -3,7 +3,9 @@
 {% block content %}
     <div class="row">
         <div class="col-8 news-content">
-            {{ user_name }}
+            {{ user_data.username }}
+            {{ user_data.email }}
+            {{ user_data.role }}
         </div>
     </div>
 {% endblock %}

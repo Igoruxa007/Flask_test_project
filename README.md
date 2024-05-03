@@ -11,6 +11,6 @@ SQLALCHEMY_TRACK_MODIFICATIONS = False - отключение отслежива
 Для добавления админа create_admin.py
 
 Для запуска сервера на windows:
-set FLASK_APP=webapp && set FLASK_DEBUG=1 && set flask run
+set FLASK_APP=webapp && set FLASK_ENV=development && set FLASK_DEBUG=1 && flask run
 Linux:
 export FLASK_APP=webapp && export FLASK_DEBUG=1 && flask run
