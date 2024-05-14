@@ -80,7 +80,9 @@ def user_page(username):
     title = 'Ваши данные'
     user_data = {'username': user.username,
                  'email': user.email,
-                 'role': user.role}
+                 'role': user.role,
+                 'about_me': user.about_me,
+                 'last_seen': user.last_seen}
     return render_template('users/user_page.html',
                            page_title=title,
                            user_data=user_data)

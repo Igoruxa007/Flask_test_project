@@ -1,6 +1,8 @@
 from flask import Flask
-from flask_login import LoginManager
+from flask_login import LoginManager, current_user
 from flask_migrate import Migrate
+
+from datetime import datetime, timezone
 
 from webapp.model import db
 from webapp.user.models import User
@@ -29,5 +31,12 @@ def create_app():
     @login_manager.user_loader
     def load_user(user_id):
         return User.query.get(user_id)
+
+    @app.before_request
+    def before_request():
+        if current_user.is_authenticated:
+            current_user.last_seen = datetime.now(tz=timezone.utc)
+            db.session.add(current_user)
+            db.session.commit()
 
     return app
