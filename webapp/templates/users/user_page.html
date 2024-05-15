@@ -5,6 +5,9 @@
         <tr valign="top">
             <td>
                 <h1>User: {{ user_data.username }}</h1>
+                {% if user_data == current_user %}
+                <p><a href="{{ url_for('user.edit_profile') }}">Внести изменения</a></p>
+                {% endif %}
                 <p>{{ user_data.email }}</p>
                 <p>{{ user_data.role }}</p>
                 {% if user_data.about_me %}<p>{{ user_data.about_me }}</p>{% endif %}
