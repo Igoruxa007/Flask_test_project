@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import BooleanField, StringField, PasswordField, SubmitField
-from wtforms.validators import DataRequired, Email, EqualTo, ValidationError
+from wtforms import BooleanField, StringField, PasswordField, SubmitField, TextAreaField
+from wtforms.validators import DataRequired, Email, EqualTo, ValidationError, Length
 from webapp.user.models import User
 
 
@@ -44,3 +44,13 @@ class RegistrationForm(FlaskForm):
             raise ValidationError(
                 'Пользователь с такой электронной почтой уже зарегестрирован'
             )
+
+
+class EditProfForm(FlaskForm):
+    username = StringField('Имя пользователя',
+                           validators=[DataRequired()],
+                           render_kw={"class": "form-control"})
+    about_me = TextAreaField('Обо мне',
+                             validators=[Length(min=0, max=140)],
+                             render_kw={"class": "form-control"})
+    submit = SubmitField('Submit')

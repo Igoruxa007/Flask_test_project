@@ -1,8 +1,8 @@
-from flask_login import current_user, login_user, logout_user
-from flask import Blueprint, render_template, flash, redirect, url_for
+from flask_login import current_user, login_user, logout_user, login_required
+from flask import Blueprint, render_template, flash, redirect, url_for, request
 
 from webapp.model import db
-from webapp.user.forms import LoginForm, RegistrationForm
+from webapp.user.forms import LoginForm, RegistrationForm, EditProfForm
 from webapp.user.models import User
 
 blueprint = Blueprint('user', __name__, url_prefix='/user')
@@ -78,11 +78,24 @@ def user_page(username):
         return redirect(url_for('news.index'))
     user = User.query.filter_by(username=username).first_or_404()
     title = 'Ваши данные'
-    user_data = {'username': user.username,
-                 'email': user.email,
-                 'role': user.role,
-                 'about_me': user.about_me,
-                 'last_seen': user.last_seen}
     return render_template('users/user_page.html',
                            page_title=title,
-                           user_data=user_data)
+                           user_data=user)
+
+
+@blueprint.route('/edit_profile', methods=['POST', 'GET'])
+@login_required
+def edit_profile():
+    form = EditProfForm()
+    if form.validate_on_submit():
+        current_user.username = form.username.data
+        current_user.about_me = form.about_me.data
+        db.session.commit()
+        flash('Изменения внсены')
+        return redirect(url_for('user.edit_profile'))
+    elif request.method == 'GET':
+        form.username.data = current_user.username
+        form.about_me.data = current_user.about_me
+    return render_template('users/edit_profile.html',
+                           title='Edit profile',
+                           form=form)
