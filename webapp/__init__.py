@@ -43,8 +43,4 @@ def create_app():
             db.session.add(current_user)
             db.session.commit()
 
-    # @app.errorhandler(404)
-    # def not_found_error(error):
-    #     return render_template('errors/404.html'), 404
-
     return app
