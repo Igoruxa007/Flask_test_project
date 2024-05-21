@@ -1,4 +1,7 @@
+from collections.abc import Sequence
+from typing import Any, Mapping
 from flask_wtf import FlaskForm
+from flask_wtf.form import _Auto
 from wtforms import BooleanField, StringField, PasswordField, SubmitField, TextAreaField
 from wtforms.validators import DataRequired, Email, EqualTo, ValidationError, Length
 from webapp.user.models import User
@@ -54,3 +57,13 @@ class EditProfForm(FlaskForm):
                              validators=[Length(min=0, max=140)],
                              render_kw={"class": "form-control"})
     submit = SubmitField('Submit')
+
+    def __init__(self, original_uesrname, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.original_username = original_uesrname
+
+    def validate_username(self, username):
+        if username.data != self.original_username:
+            user = User.query.filter_by(username=self.username.data).first()
+            if user is not None:
+                raise ValidationError('Please use a different username.')
