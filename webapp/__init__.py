@@ -9,6 +9,7 @@ from webapp.user.models import User
 from webapp.user.views import blueprint as user_blueprint
 from webapp.admin.views import blueprint as admin_blueprint
 from webapp.news.views import blueprint as news_blueprint
+from webapp.errors import not_found_error, internal_error
 
 
 def create_app():
@@ -27,6 +28,9 @@ def create_app():
     app.register_blueprint(admin_blueprint)
     app.register_blueprint(news_blueprint)
 
+    app.register_error_handler(404, not_found_error)
+    app.register_error_handler(500, internal_error)
+
     # Получение ID пользователся для при загрузке страниц
     @login_manager.user_loader
     def load_user(user_id):
@@ -38,5 +42,9 @@ def create_app():
             current_user.last_seen = datetime.now(tz=timezone.utc)
             db.session.add(current_user)
             db.session.commit()
+
+    # @app.errorhandler(404)
+    # def not_found_error(error):
+    #     return render_template('errors/404.html'), 404
 
     return app
