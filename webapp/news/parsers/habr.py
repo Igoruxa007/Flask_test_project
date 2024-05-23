@@ -12,8 +12,7 @@ def get_news_snippets():
                     q=python&order_by=date")
     if html:
         soup = BeautifulSoup(html, 'html.parser')
-        all_news = soup.find(class_="tm-articles-list"). \
-            findAll('div', class_='tm-article-snippet tm-article-snippet')
+        all_news = soup.find(class_="tm-articles-list").findAll('div', class_='tm-article-snippet tm-article-snippet')
         for news in all_news:
             title = news.find('a', class_='tm-title__link').text
             url = news.find('a', class_='tm-title__link')['href']
