@@ -12,14 +12,21 @@ from webapp.news.views import blueprint as news_blueprint
 from webapp.errors import not_found_error, internal_error
 
 
-def create_app():
+def create_app(test_config=None):
     app = Flask(__name__)
-    app.config.from_pyfile('config.py')
-    db.init_app(app)
-    migrate = Migrate(app, db)
 
-    with app.app_context():
-        db.create_all()
+    if test_config is None:
+        app.config.from_pyfile('config.py')
+        db.init_app(app)
+        with app.app_context():
+            db.create_all()
+    else:
+        app.config.from_mapping(test_config)
+        db.init_app(app)
+        with app.app_context():
+            db.create_all()
+
+    migrate = Migrate(app, db)
 
     login_manager = LoginManager()
     login_manager.init_app(app)

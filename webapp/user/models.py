@@ -46,7 +46,7 @@ class User(db.Model, UserMixin):
             self.followed.append(user)
 
     def unfollow(self, user):
-        if self.is_followig(user):
+        if self.is_following(user):
             self.followed.remove(user)
 
     def is_following(self, user):
@@ -69,4 +69,4 @@ class Post(db.Model):
                         db.ForeignKey('user.id'))
 
     def __repr__(self):
-        return '<Post {}>'.format(self.body)
+        return '<Post {} {}>'.format(self.body, self.user_id)
