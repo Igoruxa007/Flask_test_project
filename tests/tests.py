@@ -57,6 +57,7 @@ class UserModelCase(unittest.TestCase):
         u3 = User(username='Aohn', email='a@a.a')
         u4 = User(username='Bohn', email='b@b.b')
         db.session.add_all([u1, u2, u3, u4])
+        db.session.commit()
 
         now = datetime.now(tz=timezone.utc)
         p1 = Post(body="post 1", user_id=u1.id,
@@ -70,8 +71,6 @@ class UserModelCase(unittest.TestCase):
         db.session.add_all([p1, p2, p3, p4])
         db.session.commit()
 
-        self.assertFalse(p1)
-
         u1.follow(u2)
         u1.follow(u3)
         u2.follow(u3)
@@ -82,14 +81,14 @@ class UserModelCase(unittest.TestCase):
         self.assertTrue(u1.is_following(u3))
         self.assertFalse(u1.is_following(u4))
 
-        f1 = u1.followed_posts().count()
+        f1 = u1.followed_posts().all()
         f2 = u2.followed_posts().all()
         f3 = u3.followed_posts().all()
         f4 = u4.followed_posts().all()
-        # self.assertEqual(f1, [p2, p3])
-        # self.assertEqual(f2, [p3])
-        # self.assertEqual(f3, [p4])
-        # self.assertEqual(f4, [])
+        self.assertEqual(f1, [p3, p2])
+        self.assertEqual(f2, [p3])
+        self.assertEqual(f3, [p4])
+        self.assertEqual(f4, [])
 
 
 if __name__ == '__main__':
