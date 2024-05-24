@@ -39,7 +39,7 @@ class User(db.Model, UserMixin):
         return self.role == 'admin'
 
     def __repr__(self):
-        return '<User {}>'.format(self.username)
+        return '<User {}'.format(self.username)
 
     def follow(self, user):
         if not self.is_following(user):
