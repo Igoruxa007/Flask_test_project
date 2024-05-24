@@ -100,3 +100,35 @@ def edit_profile():
     return render_template('users/edit_profile.html',
                            title='Edit profile',
                            form=form)
+
+
+@blueprint.route('/follow/<username>')
+@login_required
+def follow(username):
+    user = User.query.filter_by(username=username).first()
+    if user is None:
+        flash('User {} not found'.format(username))
+        return redirect(url_for('news.index'))
+    elif user == current_user:
+        flash('You cannot follow yourself')
+        return redirect(url_for('user.user_page', username=username))
+    current_user.follow(user)
+    db.session.commit()
+    flash('You are following {}'.format(username))
+    return redirect(url_for('user.user_page', username=username))
+
+
+@blueprint.route('/unfollow/<username>')
+@login_required
+def unfollow(username):
+    user = User.query.filter_by(username=username).first()
+    if user is None:
+        flash('User {} not found'.format(username))
+        return redirect(url_for('news.index'))
+    elif user == current_user:
+        flash('You cannot unfollow yourself')
+        return redirect(url_for('user.user_page', username=username))
+    current_user.unfollow(user)
+    db.session.commit()
+    flash('You are unfollowing {}'.format(username))
+    return redirect(url_for('user.user_page', username=username))
