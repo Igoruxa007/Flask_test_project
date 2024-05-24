@@ -5,13 +5,22 @@
         <tr valign="top">
             <td>
                 <h1>User: {{ user_data.username }}</h1>
-                {% if user_data == current_user %}
-                <p><a href="{{ url_for('user.edit_profile') }}">Внести изменения</a></p>
-                {% endif %}
                 <p>{{ user_data.email }}</p>
                 <p>{{ user_data.role }}</p>
                 {% if user_data.about_me %}<p>{{ user_data.about_me }}</p>{% endif %}
                 {% if user_data.last_seen %}<p>Last seen on: {{ user_data.last_seen }}</p>{% endif %}
+
+                <p>Подписки: {{ user_data.followed.count() }}</p>
+
+                <p>Подписчики: {{ user_data.followers.count() }}</p>
+                
+                {% if user_data == current_user %}
+                <p><a href="{{ url_for('user.edit_profile') }}">Внести изменения</a></p>
+                {% elif not current_user.is_following(user_data) %}
+                <p><a href="{{ url_for('user.follow', username=user_data.username) }}">Подписаться</a></p>
+                {% elif current_user.is_following(user_data) %}
+                <p><a href="{{ url_for('user.unfollow', username=user_data.username) }}">Отписаться</a></p>
+                {% endif %}
             </td>
         </tr>
     </table>
