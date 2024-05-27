@@ -6,7 +6,7 @@ from webapp.news.models import News
 blueprint = Blueprint('news', __name__)
 
 
-@blueprint.route("/")
+@blueprint.route('/')
 def index():
     page_title = "Прогноз погоды"
     weather = weather_by_city()
