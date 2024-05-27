@@ -140,7 +140,7 @@ def write_post():
     post_form = PostForm()
     if post_form.validate_on_submit():
         user = User.query.filter_by(username=current_user.username).first()
-        post = Post(body=post_form.post.data, user_id=user.user_id)
+        post = Post(body=post_form.post.data, user_id=user.id)
         db.session.add(post)
         db.session.commit()
         flash('Your poem posted')
