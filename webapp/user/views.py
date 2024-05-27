@@ -2,7 +2,8 @@ from flask_login import current_user, login_user, logout_user, login_required
 from flask import Blueprint, render_template, flash, redirect, url_for, request
 
 from webapp.model import db
-from webapp.user.forms import LoginForm, RegistrationForm, EditProfForm, PostForm
+from webapp.user.forms import LoginForm, RegistrationForm, \
+    EditProfForm, PostForm
 from webapp.user.models import User, Post
 
 blueprint = Blueprint('user', __name__, url_prefix='/user')
@@ -144,7 +145,8 @@ def write_post():
         db.session.add(post)
         db.session.commit()
         flash('Your poem posted')
-        return redirect(url_for('user.user_page', username=current_user.username))
+        return redirect(url_for('user.user_page',
+                                username=current_user.username))
     title = "Сочиняй"
     return render_template('users/write_post.html',
                            page_title=title,

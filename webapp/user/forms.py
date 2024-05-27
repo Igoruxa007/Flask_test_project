@@ -1,9 +1,8 @@
-from collections.abc import Sequence
-from typing import Any, Mapping
 from flask_wtf import FlaskForm
-from flask_wtf.form import _Auto
-from wtforms import BooleanField, StringField, PasswordField, SubmitField, TextAreaField
-from wtforms.validators import DataRequired, Email, EqualTo, ValidationError, Length
+from wtforms import BooleanField, StringField, PasswordField, SubmitField, \
+    TextAreaField
+from wtforms.validators import DataRequired, Email, EqualTo, ValidationError, \
+    Length
 from webapp.user.models import User
 
 

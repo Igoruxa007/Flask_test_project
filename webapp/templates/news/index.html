@@ -10,6 +10,15 @@
       <p>{{ news.published.strftime('%d.%m.%Y') }}</p>
       <hr />
     {% endfor %}
+
+    {% if posts %}
+      {% for post in posts %}
+        <h3>{{ post.user_id }}</a></h3>
+        <p>{{ post.body }}</p>
+        <hr />
+      {% endfor %}
+    {% endif %}
+
   </div>
   <div class="col-4">
     <h2>Прогноз погоды</h2>
