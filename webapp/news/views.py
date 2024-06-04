@@ -43,6 +43,7 @@ def explore():
                            posts=posts
                            )
 
+
 @blueprint.route('/news/<int:news_id>')
 def single_news(news_id):
     my_news = News.query.filter(News.id == news_id).first()
