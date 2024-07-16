@@ -1,28 +1,40 @@
-from flask import abort, Blueprint, render_template, request
+from flask import abort, Blueprint, render_template, request, flash
 from flask_login import current_user, login_required
 
+from webapp.model import db
 from webapp.weather import weather_by_city
 from webapp.news.models import News
+from webapp.user.models import Post
+from webapp.user.forms import PostForm
 
 blueprint = Blueprint('news', __name__)
 
 
-@blueprint.route('/')
-@blueprint.route('/index')
+@blueprint.route('/', methods=['GET', 'POST'])
+@blueprint.route('/index', methods=['GET', 'POST'])
 def index():
     page_title = "Прогноз погоды"
     weather = weather_by_city()
     news = News.query.order_by(News.published.desc()).all()
     posts = None
+    form = None
     if current_user.is_authenticated:
         posts = current_user.followed_posts().paginate(page=1,
                                                        per_page=5,
                                                        error_out=False).items
+        form = PostForm()
+        if form.validate_on_submit():
+            post = Post(body=form.post.data)
+            db.session.add(post)
+            db.session.commit()
+            flash('Post posted!')
+
     return render_template('news/index.html',
                            page_title=page_title,
                            weather_text=weather,
                            news_list=news,
-                           posts=posts
+                           posts=posts,
+                           form=form
                            )
 
 

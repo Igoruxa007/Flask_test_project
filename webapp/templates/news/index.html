@@ -28,6 +28,21 @@
       Прогноз погоды не доступен
     {% endif %}
   </div>
+
+  {% if form%}
+    <form action="" method="post">
+      {{ form.hidden_tag() }}
+      <p>
+        {{ form.post.label }}<br>
+        {{ form.post(cols=32, row=4) }}
+        {% for error in form.post.errors %}
+        <span style="color: red">[{{ error }}]</span>
+        {% endfor %}
+      </p>
+      <p>{{ form.submit() }}</p>
+    </form>
+  {% endif %}
+
 </div>
 
 {% block post_in %} {% endblock post_in %}
