@@ -9,6 +9,7 @@
                 <p>{{ user_data.role }}</p>
                 {% if user_data.about_me %}<p>{{ user_data.about_me }}</p>{% endif %}
                 {% if user_data.last_seen %}<p>Last seen on: {{ user_data.last_seen }}</p>{% endif %}
+                <p>Last seen on: {{ moment(user_data.last_seen).format('LLL') }}</p>
 
                 <p>Подписки: {{ user_data.followed.count() }}</p>
 
