@@ -1,4 +1,4 @@
-from flask import abort, Blueprint, render_template, request, flash
+from flask import abort, Blueprint, render_template, request, flash, url_for
 from flask_login import current_user, login_required
 
 from webapp.model import db
@@ -13,15 +13,17 @@ blueprint = Blueprint('news', __name__)
 @blueprint.route('/', methods=['GET', 'POST'])
 @blueprint.route('/index', methods=['GET', 'POST'])
 def index():
-    page_title = "Прогноз погоды"
+    page_title = "R2D2"
     weather = weather_by_city()
-    news = News.query.order_by(News.published.desc()).all()
+    news = News.query.order_by(News.published.desc()).paginate(page=1,
+                                                               per_page=5,
+                                                               error_out=False).items
     posts = None
     form = None
     if current_user.is_authenticated:
-        posts = current_user.followed_posts().paginate(page=1,
-                                                       per_page=5,
-                                                       error_out=False).items
+        posts = db.paginate(current_user.followed_posts(), page=1, per_page=5, error_out=False)
+        next_posts = url_for('news.explore', page=posts.next_num) \
+            if posts.has_next else None
         form = PostForm()
         if form.validate_on_submit():
             post = Post(body=form.post.data)
@@ -34,25 +36,32 @@ def index():
                            weather_text=weather,
                            news_list=news,
                            posts=posts,
-                           form=form
+                           form=form,
+                           next_posts=next_posts
                            )
 
 
 @blueprint.route('/explore')
 @login_required
 def explore():
-    page_title = "Прогноз погоды"
+    page_title = "Hello"
     weather = weather_by_city()
     news = News.query.order_by(News.published.desc()).all()
 
     page = request.args.get('page', 1, type=int)
     posts = current_user.followed_posts().paginate(
-        page=page, per_page=5, error_out=False).items
+        page=page, per_page=5, error_out=False)
+    next_posts = url_for('news.explore', page=posts.next_num) \
+            if posts.has_next else None
+    prev_posts = url_for('news.explore', page=posts.prev_num) \
+            if posts.has_prev else None
     return render_template('news/index.html',
                            page_title=page_title,
                            weather_text=weather,
                            news_list=news,
-                           posts=posts
+                           posts=posts,
+                           next_posts=next_posts,
+                           prev_posts=prev_posts
                            )
 
 
