@@ -11,6 +11,18 @@
       <hr />
     {% endfor %}
 
+  </div>
+  <div class="col-4">
+
+    <h2>Прогноз погоды</h2>
+    {% if weather_text %}
+      {{ weather_text.temp_c }}, ощущается как {{ weather_text.feelslike_c }}
+    {% else %}
+      Прогноз погоды не доступен
+    {% endif %}
+
+    <p>
+    <h2>Посты</h2>
     {% if posts %}
       {% for post in posts %}
         <h3>{{ post.user_id }}</a></h3>
@@ -19,17 +31,17 @@
       {% endfor %}
     {% endif %}
 
-  </div>
-  <div class="col-4">
-    <h2>Прогноз погоды</h2>
-    {% if weather_text %}
-      {{ weather_text.temp_c }}, ощущается как {{ weather_text.feelslike_c }}
-    {% else %}
-      Прогноз погоды не доступен
+    
+    {% if prev_posts %}
+    <a href="{{ prev_posts }}">Prev page</a>
     {% endif %}
-  </div>
 
-  {% if form%}
+    {% if next_posts %}
+    <a href="{{ next_posts }}">Next page</a>
+    {% endif %}
+
+    <p>
+     {% if form%}
     <form action="" method="post">
       {{ form.hidden_tag() }}
       <p>
@@ -42,6 +54,7 @@
       <p>{{ form.submit() }}</p>
     </form>
   {% endif %}
+  </div>
 
 </div>
 

@@ -2,17 +2,20 @@ from datetime import datetime
 
 from bs4 import BeautifulSoup
 
-from webapp.news.parsers.utils import get_html, save_news
+from webapp.news.parsers.utils import get_html, save_news, get_html_from_file
 from webapp.model import db
 from webapp.news.models import News
 
 
 def get_news_snippets():
-    html = get_html("https://habr.com/ru/search/?target_type=posts& \
-                    q=python&order_by=date")
+    # html = get_html("https://habr.com/ru/search/?target_type=posts& \
+    #                  q=python&order_by=date")
+    html = get_html_from_file()
     if html:
         soup = BeautifulSoup(html, 'html.parser')
-        all_news = soup.find(class_="tm-articles-list").findAll('div', class_='tm-article-snippet tm-article-snippet')
+        all_news = soup.find(class_="tm-articles-list")
+        print("1", all_news)
+        all_news = all_news.findAll('div', class_='tm-article-snippet tm-article-snippet')
         for news in all_news:
             title = news.find('a', class_='tm-title__link').text
             url = news.find('a', class_='tm-title__link')['href']

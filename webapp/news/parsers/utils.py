@@ -23,6 +23,12 @@ def get_html(url):
         return False
 
 
+def get_html_from_file():
+    with open("new 1.html", 'r', encoding='utf-8') as f:
+        data = f.read()
+    return data
+
+
 def save_news(title, url, published):
     news_exists = News.query.filter(News.url == url).count()
     if not news_exists:
