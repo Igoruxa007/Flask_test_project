@@ -4,7 +4,7 @@
 SQLALCHEMY_DATABASE_URI
 WEATHER_API_KEY для weatherapi.com
 WEATHER_DEFAULT_CITY
-SECRET_KEY
+SECRET_KEY # For LoginForm
 SQLALCHEMY_TRACK_MODIFICATIONS = False - отключение отслеживания изменений в БД
  
 Для обновления новостей зпустить get_all_news.py
