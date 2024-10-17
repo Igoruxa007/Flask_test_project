@@ -22,3 +22,10 @@ python -m unittest -v tests.tests
 set FLASK_APP=webapp && set FLASK_ENV=development && set FLASK_DEBUG=1 && flask run
 Linux:
 export FLASK_APP=webapp && export FLASK_DEBUG=1 && flask run
+
+Celery
+Запустить redis
+Linux/Mac:
+celery -A tasks worker --loglevel=info
+Windows:
+set FORKED_BY_MULTIPROCESSING=1 && celery -A tasks worker --loglevel=info
