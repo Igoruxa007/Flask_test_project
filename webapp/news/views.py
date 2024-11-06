@@ -35,6 +35,9 @@ def index():
             db.session.add(post)
             db.session.commit()
             flash("Post posted!")
+    else:
+        posts = None
+        next_posts = None
 
     return render_template(
         "news/index.html",
