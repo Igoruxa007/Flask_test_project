@@ -28,4 +28,5 @@ Celery
 Linux/Mac:
 celery -A tasks worker --loglevel=info
 Windows:
-set FORKED_BY_MULTIPROCESSING=1 && celery -A tasks worker --loglevel=info
+celery -A tasks worker --loglevel=info -P eventlet
+celery -A tasks beat --loglevel=INFO
