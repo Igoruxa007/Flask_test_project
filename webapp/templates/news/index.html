@@ -10,6 +10,10 @@
       <p>{{ news.published.strftime('%d.%m.%Y') }}</p>
       <hr />
     {% endfor %}
+    
+    {% if next_news %}
+    <a href="{{ next_news }}">Next page</a>
+    {% endif %}
 
   </div>
   <div class="col-4">
