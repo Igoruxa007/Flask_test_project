@@ -15,13 +15,10 @@ blueprint = Blueprint("news", __name__)
 def index():
     page_title = "R2D2"
     weather = weather_by_city()
-    news = (
-        News.query.order_by(News.published.desc())
-        .paginate(page=1, per_page=5, error_out=False)
-        .items
+    news = db.paginate(
+        News.query.order_by(News.published.desc()),
+        page=1, per_page=5, error_out=False
     )
-    posts = None
-    form = None
     if current_user.is_authenticated:
         posts = db.paginate(
             current_user.followed_posts(), page=1, per_page=5, error_out=False
@@ -29,21 +26,25 @@ def index():
         next_posts = (
             url_for("news.explore", page=posts.next_num) if posts.has_next else None
         )
+        next_news = url_for("news.explore", page=news.next_num) if news.has_next else None
         form = PostForm()
         if form.validate_on_submit():
-            post = Post(body=form.post.data)
+            post = Post(body=form.post.data, user_id=current_user.id)
             db.session.add(post)
             db.session.commit()
             flash("Post posted!")
     else:
         posts = None
         next_posts = None
+        next_news = None
+        form = None
 
     return render_template(
         "news/index.html",
         page_title=page_title,
         weather_text=weather,
         news_list=news,
+        next_news=next_news,
         posts=posts,
         form=form,
         next_posts=next_posts,
