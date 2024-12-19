@@ -30,3 +30,7 @@ celery -A tasks worker --loglevel=info
 Windows:
 celery -A tasks worker --loglevel=info -P eventlet
 celery -A tasks beat --loglevel=INFO
+
+Docker
+docker build --tag flask_test_project-server
+docker run -p 5001:5000 flask_test_project-server 
