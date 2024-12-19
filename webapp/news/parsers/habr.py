@@ -2,7 +2,7 @@ from datetime import datetime
 
 from bs4 import BeautifulSoup
 
-from webapp.news.parsers.utils import get_html, save_news, get_html_from_file
+from webapp.news.parsers.utils import get_html, save_news
 from webapp.model import db
 from webapp.news.models import News
 
@@ -34,7 +34,7 @@ def parse_habr_date(date_str):
 def get_news_content():
     news_without_text = News.query.filter(News.text.is_(None))
     for news in news_without_text:
-        html = get_html('https://habr.com'+news.url)
+        html = get_html('https://habr.com' + news.url)
         if html:
             soup = BeautifulSoup(html, 'html.parser')
             article = soup.find('div', class_='article-formatted-body'). \
