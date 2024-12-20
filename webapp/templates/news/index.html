@@ -10,7 +10,7 @@
       <p>{{ news.published.strftime('%d.%m.%Y') }}</p>
       <hr />
     {% endfor %}
-    
+
     {% if next_news %}
     <a href="{{ next_news }}">Next page</a>
     {% endif %}
@@ -35,7 +35,7 @@
       {% endfor %}
     {% endif %}
 
-    
+
     {% if prev_posts %}
     <a href="{{ prev_posts }}">Prev page</a>
     {% endif %}
