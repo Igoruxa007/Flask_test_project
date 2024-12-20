@@ -1,10 +1,23 @@
-from flask_login import current_user, login_user, logout_user, login_required
-from flask import Blueprint, render_template, flash, redirect, url_for, request
+from __future__ import annotations
+
+from flask import Blueprint
+from flask import flash
+from flask import redirect
+from flask import render_template
+from flask import request
+from flask import url_for
+from flask_login import current_user
+from flask_login import login_required
+from flask_login import login_user
+from flask_login import logout_user
 
 from webapp.model import db
-from webapp.user.forms import LoginForm, RegistrationForm, \
-    EditProfForm, PostForm
-from webapp.user.models import User, Post
+from webapp.user.forms import EditProfForm
+from webapp.user.forms import LoginForm
+from webapp.user.forms import PostForm
+from webapp.user.forms import RegistrationForm
+from webapp.user.models import Post
+from webapp.user.models import User
 
 blueprint = Blueprint('user', __name__, url_prefix='/user')
 
@@ -20,11 +33,13 @@ def logout():
 def login():
     if current_user.is_authenticated:
         return redirect(url_for('news.index'))
-    title = "Авторизация"
+    title = 'Авторизация'
     login_form = LoginForm()
-    return render_template('users/login.html',
-                           page_title=title,
-                           form=login_form)
+    return render_template(
+        'users/login.html',
+        page_title=title,
+        form=login_form,
+    )
 
 
 @blueprint.route('/process-login', methods=['POST'])
@@ -46,18 +61,22 @@ def register():
         return redirect(url_for('news.index'))
     form = RegistrationForm()
     title = 'Регистрация'
-    return render_template('users/registration.html',
-                           page_title=title,
-                           form=form)
+    return render_template(
+        'users/registration.html',
+        page_title=title,
+        form=form,
+    )
 
 
 @blueprint.route('/process-reg', methods=['POST'])
 def process_reg():
     form = RegistrationForm()
     if form.validate_on_submit():
-        new_user = User(username=form.username.data,
-                        email=form.email.data,
-                        role='user')
+        new_user = User(
+            username=form.username.data,
+            email=form.email.data,
+            role='user',
+        )
         new_user.set_password(form.password.data)
         db.session.add(new_user)
         db.session.commit()
@@ -66,10 +85,12 @@ def process_reg():
     else:
         for field, errors in form.errors.items():
             for error in errors:
-                flash('Ошибка в поле "{}":- {}'.format(
-                    getattr(form, field).label.text,
-                    error
-                ))
+                flash(
+                    'Ошибка в поле "{}":- {}'.format(
+                        getattr(form, field).label.text,
+                        error,
+                    ),
+                )
         return redirect(url_for('user.register'))
 
 
@@ -79,9 +100,11 @@ def user_page(username):
         return redirect(url_for('news.index'))
     user = User.query.filter_by(username=username).first_or_404()
     title = 'Ваши данные'
-    return render_template('users/user_page.html',
-                           page_title=title,
-                           user_data=user)
+    return render_template(
+        'users/user_page.html',
+        page_title=title,
+        user_data=user,
+    )
 
 
 @blueprint.route('/edit_profile', methods=['POST', 'GET'])
@@ -93,14 +116,20 @@ def edit_profile():
         current_user.about_me = form.about_me.data
         db.session.commit()
         flash('Изменения внсены')
-        return redirect(url_for('user.user_page',
-                                username=current_user.username))
+        return redirect(
+            url_for(
+                'user.user_page',
+                username=current_user.username,
+            ),
+        )
     elif request.method == 'GET':
         form.username.data = current_user.username
         form.about_me.data = current_user.about_me
-    return render_template('users/edit_profile.html',
-                           title='Edit profile',
-                           form=form)
+    return render_template(
+        'users/edit_profile.html',
+        title='Edit profile',
+        form=form,
+    )
 
 
 @blueprint.route('/follow/<username>')
@@ -108,14 +137,14 @@ def edit_profile():
 def follow(username):
     user = User.query.filter_by(username=username).first()
     if user is None:
-        flash('User {} not found'.format(username))
+        flash(f'User {username} not found')
         return redirect(url_for('news.index'))
     elif user == current_user:
         flash('You cannot follow yourself')
         return redirect(url_for('user.user_page', username=username))
     current_user.follow(user)
     db.session.commit()
-    flash('You are following {}'.format(username))
+    flash(f'You are following {username}')
     return redirect(url_for('user.user_page', username=username))
 
 
@@ -124,14 +153,14 @@ def follow(username):
 def unfollow(username):
     user = User.query.filter_by(username=username).first()
     if user is None:
-        flash('User {} not found'.format(username))
+        flash(f'User {username} not found')
         return redirect(url_for('news.index'))
     elif user == current_user:
         flash('You cannot unfollow yourself')
         return redirect(url_for('user.user_page', username=username))
     current_user.unfollow(user)
     db.session.commit()
-    flash('You are unfollowing {}'.format(username))
+    flash(f'You are unfollowing {username}')
     return redirect(url_for('user.user_page', username=username))
 
 
@@ -145,9 +174,15 @@ def write_post():
         db.session.add(post)
         db.session.commit()
         flash('Your poem posted')
-        return redirect(url_for('user.user_page',
-                                username=current_user.username))
-    title = "Сочиняй"
-    return render_template('users/write_post.html',
-                           page_title=title,
-                           form=post_form)
+        return redirect(
+            url_for(
+                'user.user_page',
+                username=current_user.username,
+            ),
+        )
+    title = 'Сочиняй'
+    return render_template(
+        'users/write_post.html',
+        page_title=title,
+        form=post_form,
+    )

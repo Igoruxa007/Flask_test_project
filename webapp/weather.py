@@ -1,14 +1,15 @@
-import requests
+from __future__ import annotations
 
+import requests
 from flask import current_app
 
 
 def weather_by_city():
-    weather_url = "http://api.weatherapi.com/v1/current.json"
+    weather_url = 'http://api.weatherapi.com/v1/current.json'
     params = {
-        "key": current_app.config['WEATHER_API_KEY'],
-        "q": current_app.config['WEATHER_DEFAULT_CITY'],
-        "aqi": "no",
+        'key': current_app.config['WEATHER_API_KEY'],
+        'q': current_app.config['WEATHER_DEFAULT_CITY'],
+        'aqi': 'no',
     }
     try:
         result = requests.get(weather_url, params=params)
@@ -25,6 +26,6 @@ def weather_by_city():
         return False
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     weather = weather_by_city()
     print(weather)
