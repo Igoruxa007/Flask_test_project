@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from webapp import create_app
 from webapp.news.parsers import habr
 

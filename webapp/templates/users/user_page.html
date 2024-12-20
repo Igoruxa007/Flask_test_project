@@ -16,7 +16,7 @@
                 <p>Подписки: {{ user_data.followed.count() }}</p>
 
                 <p>Подписчики: {{ user_data.followers.count() }}</p>
-                
+
                 {% if user_data == current_user %}
                 <p><a href="{{ url_for('user.edit_profile') }}">Внести изменения</a></p>
                 {% elif not current_user.is_following(user_data) %}

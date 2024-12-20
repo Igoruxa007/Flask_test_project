@@ -1,16 +1,21 @@
+from __future__ import annotations
+
+from datetime import datetime
+from datetime import timezone
+
 from flask import Flask
-from flask_login import LoginManager, current_user
+from flask_login import current_user
+from flask_login import LoginManager
 from flask_migrate import Migrate
 from flask_moment import Moment
 
-from datetime import datetime, timezone
-
+from webapp.admin.views import blueprint as admin_blueprint
+from webapp.errors import internal_error
+from webapp.errors import not_found_error
 from webapp.model import db
+from webapp.news.views import blueprint as news_blueprint
 from webapp.user.models import User
 from webapp.user.views import blueprint as user_blueprint
-from webapp.admin.views import blueprint as admin_blueprint
-from webapp.news.views import blueprint as news_blueprint
-from webapp.errors import not_found_error, internal_error
 
 
 def create_app(test_config=None):

@@ -1,9 +1,14 @@
-from datetime import datetime, timezone, timedelta
+from __future__ import annotations
+
 import unittest
+from datetime import datetime
+from datetime import timedelta
+from datetime import timezone
 
 from webapp import create_app
 from webapp.model import db
-from webapp.user.models import User, Post
+from webapp.user.models import Post
+from webapp.user.models import User
 
 
 class UserModelCase(unittest.TestCase):
@@ -12,7 +17,7 @@ class UserModelCase(unittest.TestCase):
         self.app_context = create_app({
             'TESTING': True,
             'SECRET_KEY': 'dev',
-            'SQLALCHEMY_DATABASE_URI': 'sqlite:///'
+            'SQLALCHEMY_DATABASE_URI': 'sqlite:///',
         }).app_context()
         self.app_context.push()
 
@@ -60,14 +65,22 @@ class UserModelCase(unittest.TestCase):
         db.session.commit()
 
         now = datetime.now(tz=timezone.utc)
-        p1 = Post(body="post 1", user_id=u1.id,
-                  timestamp=now + timedelta(seconds=1))
-        p2 = Post(body="post 2", user_id=u2.id,
-                  timestamp=now + timedelta(seconds=2))
-        p3 = Post(body="post 3", user_id=u3.id,
-                  timestamp=now + timedelta(seconds=3))
-        p4 = Post(body="post 4", user_id=u4.id,
-                  timestamp=now + timedelta(seconds=4))
+        p1 = Post(
+            body='post 1', user_id=u1.id,
+            timestamp=now + timedelta(seconds=1),
+        )
+        p2 = Post(
+            body='post 2', user_id=u2.id,
+            timestamp=now + timedelta(seconds=2),
+        )
+        p3 = Post(
+            body='post 3', user_id=u3.id,
+            timestamp=now + timedelta(seconds=3),
+        )
+        p4 = Post(
+            body='post 4', user_id=u4.id,
+            timestamp=now + timedelta(seconds=4),
+        )
         db.session.add_all([p1, p2, p3, p4])
         db.session.commit()
 

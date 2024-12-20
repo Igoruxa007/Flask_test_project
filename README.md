@@ -6,7 +6,7 @@ WEATHER_API_KEY для weatherapi.com
 WEATHER_DEFAULT_CITY
 SECRET_KEY # For LoginForm
 SQLALCHEMY_TRACK_MODIFICATIONS = False - отключение отслеживания изменений в БД
- 
+
 Для обновления новостей зпустить get_all_news.py
 Для добавления админа create_admin.py
 
@@ -33,4 +33,7 @@ celery -A tasks beat --loglevel=INFO
 
 Docker
 docker build --tag flask_test_project-server
-docker run -p 5001:5000 flask_test_project-server 
+docker run -p 5001:5000 flask_test_project-server
+
+Pre-commit
+pre-commit run --all-files

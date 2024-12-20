@@ -1,7 +1,14 @@
+from __future__ import annotations
+
 from functools import wraps
 
-from flask import current_app, flash, request, redirect, url_for
-from flask_login import config, current_user
+from flask import current_app
+from flask import flash
+from flask import redirect
+from flask import request
+from flask import url_for
+from flask_login import config
+from flask_login import current_user
 
 
 def admin_required(func):

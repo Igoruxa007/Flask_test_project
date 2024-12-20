@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import locale
 import platform
 
@@ -7,14 +9,16 @@ from webapp.model import db
 from webapp.news.models import News
 
 if platform.system() == 'Windows':
-    locale.setlocale(locale.LC_ALL, "russian")
+    locale.setlocale(locale.LC_ALL, 'russian')
 else:
     locale.setlocale(locale.LC_TIME, 'ru_RU')
 
 
 def get_html(url):
-    headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; \
-               rv:65.0) Gecko/20100101 Firefox/65.0'}
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; \
+               rv:65.0) Gecko/20100101 Firefox/65.0',
+    }
     try:
         result = requests.get(url, headers=headers)
         result.raise_for_status()
@@ -24,7 +28,7 @@ def get_html(url):
 
 
 def get_html_from_file():
-    with open("new 1.html", 'r', encoding='utf-8') as f:
+    with open('new 1.html', encoding='utf-8') as f:
         data = f.read()
     return data
 

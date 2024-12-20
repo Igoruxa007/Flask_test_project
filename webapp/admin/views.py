@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from flask import Blueprint
 from flask_login import current_user
 
@@ -10,6 +12,6 @@ blueprint = Blueprint('admin', __name__, url_prefix='/admin')
 @admin_required
 def admin_index():
     if current_user.is_admin:
-        return "Hi admin!"
+        return 'Hi admin!'
     else:
-        return "You shall not pass"
+        return 'You shall not pass'

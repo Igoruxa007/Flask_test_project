@@ -1,21 +1,28 @@
+from __future__ import annotations
+
 from datetime import datetime
 
 from bs4 import BeautifulSoup
 
-from webapp.news.parsers.utils import get_html, save_news
 from webapp.model import db
 from webapp.news.models import News
+from webapp.news.parsers.utils import get_html
+from webapp.news.parsers.utils import save_news
 
 
 def get_news_snippets():
-    html = get_html("https://habr.com/ru/search/?q=python&target_type=posts&order=date")
+    html = get_html(
+        'https://habr.com/ru/search/?q=python&target_type=posts&order=date',
+    )
     # html = get_html_from_file()
     if html:
         soup = BeautifulSoup(html, 'html.parser')
         # with open('Habr.html', 'w', encoding="utf-8") as file:
         #     file.write(html)
-        all_news = soup.find(class_="tm-articles-list")
-        all_news = all_news.findAll('div', class_='tm-article-snippet tm-article-snippet')
+        all_news = soup.find(class_='tm-articles-list')
+        all_news = all_news.findAll(
+            'div', class_='tm-article-snippet tm-article-snippet',
+        )
         for news in all_news:
             title = news.find('a', class_='tm-title__link').text
             url = news.find('a', class_='tm-title__link')['href']
