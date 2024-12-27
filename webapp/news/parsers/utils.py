@@ -14,7 +14,7 @@ else:
     locale.setlocale(locale.LC_TIME, 'ru_RU')
 
 
-def get_html(url):
+def get_html(url: str) -> str | bool:
     headers = {
         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; \
                rv:65.0) Gecko/20100101 Firefox/65.0',
@@ -27,13 +27,13 @@ def get_html(url):
         return False
 
 
-def get_html_from_file():
+def get_html_from_file() -> str:
     with open('new 1.html', encoding='utf-8') as f:
         data = f.read()
     return data
 
 
-def save_news(title, url, published):
+def save_news(title: str, url: str, published: str) -> None:
     news_exists = News.query.filter(News.url == url).count()
     if not news_exists:
         new_news = News(title=title, url=url, published=published)

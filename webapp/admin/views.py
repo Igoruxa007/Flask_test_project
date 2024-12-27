@@ -10,7 +10,7 @@ blueprint = Blueprint('admin', __name__, url_prefix='/admin')
 
 @blueprint.route('/')
 @admin_required
-def admin_index():
+def admin_index() -> str:
     if current_user.is_admin:
         return 'Hi admin!'
     else:

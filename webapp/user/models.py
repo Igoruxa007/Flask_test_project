@@ -4,6 +4,7 @@ from datetime import datetime
 from datetime import timezone
 
 from flask_login import UserMixin
+from sqlalchemy.orm import Query
 from werkzeug.security import check_password_hash
 from werkzeug.security import generate_password_hash
 
@@ -36,33 +37,33 @@ class User(db.Model, UserMixin):
         backref=db.backref('followers', lazy='dynamic'), lazy='dynamic',
     )
 
-    def set_password(self, password):
+    def set_password(self, password: str) -> None:
         self.password = generate_password_hash(password)
 
-    def check_password(self, password):
+    def check_password(self, password: str) -> bool:
         return check_password_hash(self.password, password)
 
     @property
-    def is_admin(self):
+    def is_admin(self) -> None:
         return self.role == 'admin'
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f'<User {self.username}'
 
-    def follow(self, user):
+    def follow(self, user: str) -> None:
         if not self.is_following(user):
             self.followed.append(user)
 
-    def unfollow(self, user):
+    def unfollow(self, user: str) -> None:
         if self.is_following(user):
             self.followed.remove(user)
 
-    def is_following(self, user):
+    def is_following(self, user) -> bool:
         return self.followed.filter(
             followers.c.followed_id == user.id,
         ).count() > 0
 
-    def followed_posts(self):
+    def followed_posts(self) -> Query:
         return Post.query.join(
             followers, (followers.c.followed_id == Post.user_id),
         ).filter(
@@ -84,5 +85,5 @@ class Post(db.Model):
         db.ForeignKey('user.id'),
     )
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f'<Post {self.body} {self.user_id}>'

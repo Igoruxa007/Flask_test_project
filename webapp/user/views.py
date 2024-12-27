@@ -10,6 +10,7 @@ from flask_login import current_user
 from flask_login import login_required
 from flask_login import login_user
 from flask_login import logout_user
+from werkzeug import Response
 
 from webapp.model import db
 from webapp.user.forms import EditProfForm
@@ -23,14 +24,14 @@ blueprint = Blueprint('user', __name__, url_prefix='/user')
 
 
 @blueprint.route('/logout')
-def logout():
+def logout() -> Response:
     logout_user()
     flash('Вы успешно вышли из учетной записи')
     return redirect(url_for('news.index'))
 
 
 @blueprint.route('/login')
-def login():
+def login() -> Response | str:
     if current_user.is_authenticated:
         return redirect(url_for('news.index'))
     title = 'Авторизация'
@@ -43,7 +44,7 @@ def login():
 
 
 @blueprint.route('/process-login', methods=['POST'])
-def process_login():
+def process_login() -> Response:
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
@@ -56,7 +57,7 @@ def process_login():
 
 
 @blueprint.route('/register')
-def register():
+def register() -> Response | str:
     if current_user.is_authenticated:
         return redirect(url_for('news.index'))
     form = RegistrationForm()
@@ -69,7 +70,7 @@ def register():
 
 
 @blueprint.route('/process-reg', methods=['POST'])
-def process_reg():
+def process_reg() -> Response:
     form = RegistrationForm()
     if form.validate_on_submit():
         new_user = User(
@@ -95,7 +96,7 @@ def process_reg():
 
 
 @blueprint.route('/<username>')
-def user_page(username):
+def user_page(username: str) -> Response | str:
     if not current_user.is_authenticated:
         return redirect(url_for('news.index'))
     user = User.query.filter_by(username=username).first_or_404()
@@ -109,7 +110,7 @@ def user_page(username):
 
 @blueprint.route('/edit_profile', methods=['POST', 'GET'])
 @login_required
-def edit_profile():
+def edit_profile() -> Response | str:
     form = EditProfForm(current_user.username)
     if form.validate_on_submit():
         current_user.username = form.username.data
@@ -134,7 +135,7 @@ def edit_profile():
 
 @blueprint.route('/follow/<username>')
 @login_required
-def follow(username):
+def follow(username: str) -> Response:
     user = User.query.filter_by(username=username).first()
     if user is None:
         flash(f'User {username} not found')
@@ -150,7 +151,7 @@ def follow(username):
 
 @blueprint.route('/unfollow/<username>')
 @login_required
-def unfollow(username):
+def unfollow(username: str) -> Response:
     user = User.query.filter_by(username=username).first()
     if user is None:
         flash(f'User {username} not found')
@@ -166,7 +167,7 @@ def unfollow(username):
 
 @blueprint.route('/write_post', methods=['GET', 'POST'])
 @login_required
-def write_post():
+def write_post() -> Response | str:
     post_form = PostForm()
     if post_form.validate_on_submit():
         user = User.query.filter_by(username=current_user.username).first()

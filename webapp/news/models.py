@@ -10,5 +10,5 @@ class News(db.Model):
     published = db.Column(db.DateTime, nullable=False)
     text = db.Column(db.Text, nullable=True)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f'<News {self.title} {self.url}>'

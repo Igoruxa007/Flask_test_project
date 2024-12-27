@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from functools import wraps
+from typing import Any
 
 from flask import current_app
 from flask import flash
@@ -11,9 +12,9 @@ from flask_login import config
 from flask_login import current_user
 
 
-def admin_required(func):
+def admin_required(func: Any) -> Any:
     @wraps(func)
-    def decorated_view(*args, **kwargs):
+    def decorated_view(*args: Any, **kwargs: Any) -> Any:
         if request.method in config.EXEMPT_METHODS:
             return func(*args, **kwargs)
         elif current_app.config.get('LOGIN_DISABLED'):
