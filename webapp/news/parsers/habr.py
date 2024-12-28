@@ -10,7 +10,7 @@ from webapp.news.parsers.utils import get_html
 from webapp.news.parsers.utils import save_news
 
 
-def get_news_snippets() -> None:
+def get_news_snippets():
     html = get_html(
         'https://habr.com/ru/search/?q=python&target_type=posts&order=date',
     )
@@ -31,14 +31,14 @@ def get_news_snippets() -> None:
             save_news(title, url, published)
 
 
-def parse_habr_date(date_str: str) -> datetime:
+def parse_habr_date(date_str):
     try:
         return datetime.strptime(date_str[:10], '%Y-%m-%d')
     except ValueError:
         return datetime.now()
 
 
-def get_news_content() -> None:
+def get_news_content():
     news_without_text = News.query.filter(News.text.is_(None))
     for news in news_without_text:
         html = get_html('https://habr.com' + news.url)

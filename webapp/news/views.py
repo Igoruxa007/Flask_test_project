@@ -20,7 +20,7 @@ blueprint = Blueprint('news', __name__)
 
 @blueprint.route('/', methods=['GET', 'POST'])
 @blueprint.route('/index', methods=['GET', 'POST'])
-def index() -> str:
+def index():
     page_title = 'R2D2'
     weather = weather_by_city()
     news = db.paginate(
@@ -63,7 +63,7 @@ def index() -> str:
 
 @blueprint.route('/explore')
 @login_required
-def explore() -> str:
+def explore():
     page_title = 'Hello'
     weather = weather_by_city()
     news = News.query.order_by(News.published.desc()).all()
@@ -90,7 +90,7 @@ def explore() -> str:
 
 
 @blueprint.route('/news/<int:news_id>')
-def single_news(news_id: int) -> str:
+def single_news(news_id):
     my_news = News.query.filter(News.id == news_id).first()
     if not my_news:
         abort(404)

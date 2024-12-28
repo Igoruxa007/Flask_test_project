@@ -4,11 +4,9 @@ from datetime import datetime
 from datetime import timezone
 
 from flask_login import UserMixin
-from sqlalchemy.orm import Query
 from werkzeug.security import check_password_hash
 from werkzeug.security import generate_password_hash
 
-from webapp.model import BaseModel
 from webapp.model import db
 
 
@@ -19,7 +17,7 @@ followers = db.Table(
 )
 
 
-class User(BaseModel, UserMixin):
+class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), index=True, unique=True)
     password = db.Column(db.String(128))
@@ -38,33 +36,33 @@ class User(BaseModel, UserMixin):
         backref=db.backref('followers', lazy='dynamic'), lazy='dynamic',
     )
 
-    def set_password(self, password: str) -> None:
+    def set_password(self, password):
         self.password = generate_password_hash(password)
 
-    def check_password(self, password: str) -> bool:
+    def check_password(self, password):
         return check_password_hash(self.password, password)
 
     @property
-    def is_admin(self) -> None:
+    def is_admin(self):
         return self.role == 'admin'
 
-    def __repr__(self) -> str:
+    def __repr__(self):
         return f'<User {self.username}'
 
-    def follow(self, user: User) -> None:
+    def follow(self, user):
         if not self.is_following(user):
             self.followed.append(user)
 
-    def unfollow(self, user: User) -> None:
+    def unfollow(self, user):
         if self.is_following(user):
             self.followed.remove(user)
 
-    def is_following(self, user: User) -> bool:
+    def is_following(self, user):
         return self.followed.filter(
             followers.c.followed_id == user.id,
         ).count() > 0
 
-    def followed_posts(self) -> Query:
+    def followed_posts(self):
         return Post.query.join(
             followers, (followers.c.followed_id == Post.user_id),
         ).filter(
@@ -74,7 +72,7 @@ class User(BaseModel, UserMixin):
         )
 
 
-class Post(BaseModel):
+class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     body = db.Column(db.String(150), nullable=False)
     timestamp = db.Column(
@@ -86,5 +84,5 @@ class Post(BaseModel):
         db.ForeignKey('user.id'),
     )
 
-    def __repr__(self) -> str:
+    def __repr__(self):
         return f'<Post {self.body} {self.user_id}>'

@@ -1,10 +1,7 @@
 from __future__ import annotations
 
-from typing import Any
-
 from flask_wtf import FlaskForm
 from wtforms import BooleanField
-from wtforms import Field
 from wtforms import PasswordField
 from wtforms import StringField
 from wtforms import SubmitField
@@ -63,12 +60,12 @@ class RegistrationForm(FlaskForm):
     )
     submit = SubmitField('Отправить', render_kw={'class': 'btn btn-primary'})
 
-    def validate_username(self, username: Field) -> None:
+    def validate_username(self, username):
         user_count = User.query.filter_by(username=username.data).count()
         if user_count > 0:
             raise ValidationError('Пользователь с таким именем уже существует')
 
-    def validate_email(self, email: Field) -> None:
+    def validate_email(self, email):
         user_count = User.query.filter_by(email=email.data).count()
         if user_count > 0:
             raise ValidationError(
@@ -89,11 +86,11 @@ class EditProfForm(FlaskForm):
     )
     submit = SubmitField('Submit')
 
-    def __init__(self, original_uesrname: str, *args: Any, **kwargs: Any) -> None:
+    def __init__(self, original_uesrname, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.original_username = original_uesrname
 
-    def validate_username(self, username: Field) -> None:
+    def validate_username(self, username):
         if username.data != self.original_username:
             user = User.query.filter_by(username=self.username.data).first()
             if user is not None:
