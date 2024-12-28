@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from datetime import datetime
 from datetime import timezone
+from typing import Any
 
 from flask import Flask
 from flask_login import current_user
@@ -18,7 +19,7 @@ from webapp.user.models import User
 from webapp.user.views import blueprint as user_blueprint
 
 
-def create_app(test_config=None):
+def create_app(test_config: Any = None) -> Flask:
     app = Flask(__name__)
 
     if test_config is None:
@@ -32,9 +33,9 @@ def create_app(test_config=None):
         with app.app_context():
             db.create_all()
 
-    migrate = Migrate(app, db)
+    Migrate(app, db)
 
-    moment = Moment(app)
+    Moment(app)
 
     login_manager = LoginManager()
     login_manager.init_app(app)
@@ -48,11 +49,11 @@ def create_app(test_config=None):
 
     # Получение ID пользователся для при загрузке страниц
     @login_manager.user_loader
-    def load_user(user_id):
+    def load_user(user_id: int) -> User:
         return User.query.get(user_id)
 
     @app.before_request
-    def before_request():
+    def before_request() -> None:
         if current_user.is_authenticated:
             current_user.last_seen = datetime.now(tz=timezone.utc)
             db.session.add(current_user)

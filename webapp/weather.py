@@ -1,10 +1,12 @@
 from __future__ import annotations
 
+from typing import Any
+
 import requests
 from flask import current_app
 
 
-def weather_by_city():
+def weather_by_city() -> bool | dict[str, Any]:
     weather_url = 'http://api.weatherapi.com/v1/current.json'
     params = {
         'key': current_app.config['WEATHER_API_KEY'],
