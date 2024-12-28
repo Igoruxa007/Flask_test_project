@@ -1,9 +1,10 @@
 from __future__ import annotations
 
+from webapp.model import BaseModel
 from webapp.model import db
 
 
-class News(db.Model):
+class News(BaseModel):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String, nullable=False)
     url = db.Column(db.String, unique=True, nullable=False)

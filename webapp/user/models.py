@@ -8,6 +8,7 @@ from sqlalchemy.orm import Query
 from werkzeug.security import check_password_hash
 from werkzeug.security import generate_password_hash
 
+from webapp.model import BaseModel
 from webapp.model import db
 
 
@@ -18,7 +19,7 @@ followers = db.Table(
 )
 
 
-class User(db.Model, UserMixin):
+class User(BaseModel, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), index=True, unique=True)
     password = db.Column(db.String(128))
@@ -50,15 +51,15 @@ class User(db.Model, UserMixin):
     def __repr__(self) -> str:
         return f'<User {self.username}'
 
-    def follow(self, user: str) -> None:
+    def follow(self, user: User) -> None:
         if not self.is_following(user):
             self.followed.append(user)
 
-    def unfollow(self, user: str) -> None:
+    def unfollow(self, user: User) -> None:
         if self.is_following(user):
             self.followed.remove(user)
 
-    def is_following(self, user) -> bool:
+    def is_following(self, user: User) -> bool:
         return self.followed.filter(
             followers.c.followed_id == user.id,
         ).count() > 0
@@ -73,7 +74,7 @@ class User(db.Model, UserMixin):
         )
 
 
-class Post(db.Model):
+class Post(BaseModel):
     id = db.Column(db.Integer, primary_key=True)
     body = db.Column(db.String(150), nullable=False)
     timestamp = db.Column(

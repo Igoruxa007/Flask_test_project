@@ -20,7 +20,7 @@ def admin_required(func: Any) -> Any:
         elif current_app.config.get('LOGIN_DISABLED'):
             return func(*args, **kwargs)
         elif not current_user.is_authenticated:
-            return current_app.login_manager.unauthorized()
+            return current_app.login_manager.unauthorized()  # type: ignore
         elif not current_user.is_admin:
             flash('This page is only available to admins')
             return redirect(url_for('news.index'))
